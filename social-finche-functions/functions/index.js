@@ -16,20 +16,23 @@ app.get("/cheeps", (req, res) => {
         .then((data) => {
             let cheeps = [];
             data.forEach((doc) => {
-                cheeps.push(doc.data());
+                cheeps.push({
+                    cheepId: doc.id,
+                    body: doc.data().body,
+                    userHandle: doc.data().userHandle,
+                    createdAt: doc.data().createdAt
+                });
             });
             return res.json(cheeps);
         })
         .catch(err => console.error(err));
 });
 
-
-
 app.post("/cheep", (req, res) => {
     const newCheep = {
         body: req.body.body,
         userHandle: req.body.userHandle,
-        createdAt: admin.firestore.Timestamp.fromDate(new Date())
+        createdAt: new Date().toISOString()
     };
     admin.firestore()
         .collection('cheeps')
@@ -44,4 +47,6 @@ app.post("/cheep", (req, res) => {
 });
 
 // https: //baseurl.com/api/
+// if you want to change the region of where your requests go
+// use .region("europe-west1") for example
 exports.api = functions.https.onRequest(app);
