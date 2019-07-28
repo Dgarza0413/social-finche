@@ -23,10 +23,9 @@ app.get("/cheeps", (req, res) => {
         .catch(err => console.error(err));
 });
 
-exports.createCheep = functions.https.onRequest((req, res) => {
-    if (req.method !== 'POST') {
-        return res.status(400).json({ error: "Method not allowed" })
-    }
+
+
+app.post("/cheep", (req, res) => {
     const newCheep = {
         body: req.body.body,
         userHandle: req.body.userHandle,
